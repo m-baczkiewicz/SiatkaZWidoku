@@ -1,0 +1,13 @@
+[general]
+name=Siatka z widoku
+qgisMinimumVersion=3.0
+description=Plugin generujący siatkę z aktualnego widoku mapy QGIS z automatycznym nadpisywaniem
+version=1.2
+author=Michał Bączkiewicz
+email=michal.baczkiewicz05@gmail.com
+about=Plugin umożliwia szybkie generowanie siatki prostokątnej dopasowanej do widoku mapy. Automatycznie nadpisuje poprzednią siatkę dla szybkiej i dynamicznej pracy.
+tags=grid,vector,analysis,siatka
+category=Vector
+icon=icon.png
+experimental=False
+deprecated=False
