@@ -65,23 +65,25 @@ class SiatkaZWidokuPlugin:
             # Domyślny układ do generowania siatki to układ widoku
             grid_crs = canvas_crs
             working_extent = canvas_extent
-
-            # SPRAWDZENIE JEDNOSTEK:
-            if canvas_crs.isGeographic():
-                target_crs = QgsCoordinateReferenceSystem("EPSG:2180")
-                
-                # Tworzymy transformację z Widoku (np. WGS84) na Układ 1992
+            
+            # Niezależnie czy podkład to WGS84, Google Mercator czy inny - siatkę generujemy w 1992.
+            target_crs = QgsCoordinateReferenceSystem("EPSG:2180")
+            
+            # Jeśli układ widoku jest inny niż 1992, wykonujemy transformację zasięgu
+            if canvas_crs != target_crs:
                 transform = QgsCoordinateTransform(canvas_crs, target_crs, QgsProject.instance())
-                
-                # Przeliczamy zasięg widoku na metry
                 working_extent = transform.transformBoundingBox(canvas_extent)
-                grid_crs = target_crs # Siatka powstanie w układzie 1992
+                grid_crs = target_crs
+            else:
+                # Jeśli już jesteśmy w 1992, bierzemy dane wprost
+                working_extent = canvas_extent
+                grid_crs = canvas_crs
 
             # Dialog dla rozmiaru komórki
             cell_size, ok = QInputDialog.getDouble(
                 self.iface.mainWindow(), 
                 "Rozmiar komórki", 
-                "Podaj rozmiar komórki w metrach:", 
+                "Podaj rozmiar komórki w metrach (np. 200 dla 4ha):", 
                 200, 1, 10000, 2
             )
             if not ok:
